@@ -39,6 +39,7 @@ model Team {
 }
 
 enum Role {
+    GUEST
     ADMIN
     MANAGER
     USER

@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -41,4 +41,17 @@ export const getCurrentUser = async (): Promise<User | null> => {
         console.error("Error getting current user:", error);
         return null;
     }
+}
+
+export const checkUserPermission = (
+    user: User,
+    requiredRole: Role
+): boolean => {
+    const roleHierarchy = {
+        [Role.GUEST]: 0,
+        [Role.USER]: 1,
+        [Role.MANAGER]: 2,
+        [Role.ADMIN]: 3
+    }
+    return roleHierarchy[user.role] >= roleHierarchy[requiredRole];
 }
